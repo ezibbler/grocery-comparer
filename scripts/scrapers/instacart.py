@@ -26,7 +26,7 @@ def find_links(origin : str, target : str, final : bool = False):
 
         if name:
             values.append({
-                "link": item.get_text().strip(),
+                "link": item['href'],
                 "name": name.get_text().strip()
             })
 
