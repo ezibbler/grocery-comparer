@@ -8,12 +8,11 @@ def __main__():
     products = find_links("https://www.instacart.com/categories", "https://www.instacart.com/categories")
     print(*products)
 
-def find_links(origin : str, target : str, final : bool = False):
+def find_links(origin : str):
     values = []
-    #gets target links from base link
 
+    #gets target links from base link
     r = requests.get(origin)
-    regexed_target = target.replace("/", "\/").replace(".", "\.")
 
     soup = BeautifulSoup(r.content, "html.parser")
     #soup = soup.prettify()
@@ -30,9 +29,31 @@ def find_links(origin : str, target : str, final : bool = False):
                 "name": name.get_text().strip()
             })
 
-    #find unique values
+    return values
+
+def get_product_links(origin : str):
+    values = []
+
+    #gets target links from base link
+    r = requests.get(origin)
+
+    soup = BeautifulSoup(r.content, "html.parser")
+    #soup = soup.prettify()
+
+    #finds links to categories
+    items = soup.find_all("a", class_="e-18zipbc")
+
+    for item in items:
+        count = item.find("div", class_="e-an4oxa")
+
+        if count:
+            values.append({
+                "link": item['href'],
+                "count": count.get_text().strip()
+            })
 
     return values
+
 
 def find_price(link : str):
     r = requests.get(link)
